@@ -53,11 +53,18 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
       }
     });
 
-    loadWords("assets/dict/french_words.json").then((words) {
-      words.forEach((word) {
-        if(word.length == 5){
-          words.add(word);
+    loadWords("assets/dict/french_words.json").then((loadedWords) {
+      List<String> filteredWords = [];
+      for(var word in loadedWords){
+        if(word == "nuage"){
+          print("NUAGE lingth = ${word.length}");
         }
+        if(word.length == _wordleLength){
+          filteredWords.add(word.toUpperCase());
+        }
+      }
+      setState(() {
+        words = filteredWords;
       });
     });
   }
@@ -104,8 +111,9 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
   }
 
   void _onSubmit() {
-    if (currentGuess.length == 5) {
+    if (currentGuess.length == _wordleLength) {
       if(!words.contains(currentGuess)){
+        print(words.contains(currentGuess));
         _shake('Not word in list');
         return;
       }
@@ -198,15 +206,15 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
                     child: GridView.builder(
                       padding: EdgeInsets.all(8.0),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
+                        crossAxisCount: _wordleLength,
                         childAspectRatio: 1.0,
                         crossAxisSpacing: 4.0,
                         mainAxisSpacing: 4.0,
                       ),
                       itemCount: _maxAttemps * _wordleLength,
                       itemBuilder: (context, index) {
-                        int row = index ~/ 5;
-                        int col = index % 5;
+                        int row = index ~/ _wordleLength;
+                        int col = index % _wordleLength;
                         String letter = '';
                         Color color = Colors.grey[300]!;
 
@@ -241,7 +249,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _onSubmit,
-                    child: Text('Soumettre'),
+                    child: Text('Submit'),
                   ),
                   SizedBox(height: 20),
                 ],
@@ -254,7 +262,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
                   autofocus: true,
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.characters,
-                  maxLength: 5,
+                  maxLength: _wordleLength,
                   onChanged: (value) {
                     setState(() {
                       currentGuess = value.toUpperCase();

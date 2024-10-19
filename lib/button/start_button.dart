@@ -10,8 +10,10 @@ import '../wordle/wordle.dart';
 class StartButton extends StatelessWidget {
   final String text;
   final String dictionary;
+  final int wordleLength;
+  final int maxAttemps;
 
-  StartButton({required this.text, required this.dictionary});
+  StartButton({required this.text, required this.dictionary, required this.wordleLength, required this.maxAttemps});
 
   static Future<List<String>> loadWords(String dictionary) async {
     String jsonString = await rootBundle.loadString(dictionary);
@@ -19,8 +21,8 @@ class StartButton extends StatelessWidget {
     return jsonResponse.cast<String>();
   }
 
-  static bool wordleRules(String wordle){
-    if(wordle.length != 5 || !(RegExp(r'^[a-zA-Z]+$').hasMatch(wordle))){
+  bool wordleRules(String wordle){
+    if(wordle.length != wordleLength || !(RegExp(r'^[a-zA-Z]+$').hasMatch(wordle))){
       return false;
     }
     return true;
@@ -29,7 +31,7 @@ class StartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: (maxAttemps > 0 && wordleLength > 0) ? () {
         loadWords(dictionary).then((words) {
           String worle = '';
           do{
@@ -37,10 +39,10 @@ class StartButton extends StatelessWidget {
           }while(!wordleRules(worle));
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Wordle(title: 'Wordle Classic', wordle: worle, maxAttemps: 6,)),
+            MaterialPageRoute(builder: (context) => Wordle(title: 'Wordle Classic', wordle: worle, maxAttemps: maxAttemps,)),
           );
         });
-      },
+      } : null,
       child: Text(text),
     );
   }
@@ -48,15 +50,15 @@ class StartButton extends StatelessWidget {
 
 class StartButtonFrench extends StartButton {
 
-  StartButtonFrench(context, {required text}) : super(text: text, dictionary: 'assets/dict/french_words.json');
+  StartButtonFrench(context, {required text, required wordleLength, required maxAttemps}) : super(text: text, dictionary: 'assets/dict/french_words.json', wordleLength: wordleLength, maxAttemps: maxAttemps);
 }
 
 class StartButtonEnglish extends StartButton {
 
-  StartButtonEnglish(context, {required text}) : super(text: text, dictionary: 'assets/dict/english_words.json');
+  StartButtonEnglish(context, {required text}) : super(text: text, dictionary: 'assets/dict/english_words.json', wordleLength: 5, maxAttemps: 10);
 }
 
 class StartButtonSpanish extends StartButton {
 
-  StartButtonSpanish(context, {required text}) : super(text: text, dictionary: 'assets/dict/spanish_words.json');
+  StartButtonSpanish(context, {required text}) : super(text: text, dictionary: 'assets/dict/spanish_words.json', wordleLength: 6, maxAttemps: 10);
 }
