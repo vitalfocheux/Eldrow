@@ -1,15 +1,16 @@
-import 'dart:convert';
 import 'dart:math';
 
+import 'package:Wordle/word_list/word_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Wordle extends StatefulWidget {
-  const Wordle({Key? key, required this.title, required this.wordle, this.maxAttemps = 6}) : super(key: key);
+  const Wordle({Key? key, required this.title, required this.wordle, this.maxAttemps = 6, required this.dictionary}) : super(key: key);
 
   final String title;
   final String wordle;
   final int maxAttemps;
+  final List<Set<String>> dictionary;
 
   @override
   State<Wordle> createState() => _WordleState();
@@ -26,6 +27,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
   int _maxAttemps = 6;
   final FocusNode _focusNode = FocusNode();
   List<String> words = [];
+  List<Set<String>> _dictionary = [];
 
   late AnimationController _shakeController;
   late Animation<double> _shakeAnimation;
@@ -36,6 +38,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
     _wordle = widget.wordle;
     _wordleLength = _wordle.length;
     _maxAttemps = widget.maxAttemps;
+    _dictionary = widget.dictionary;
     print(_wordle);
 
     _shakeController = AnimationController(
@@ -53,20 +56,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
       }
     });
 
-    loadWords("assets/dict/french_words.json").then((loadedWords) {
-      List<String> filteredWords = [];
-      for(var word in loadedWords){
-        if(word == "nuage"){
-          print("NUAGE lingth = ${word.length}");
-        }
-        if(word.length == _wordleLength){
-          filteredWords.add(word.toUpperCase());
-        }
-      }
-      setState(() {
-        words = filteredWords;
-      });
-    });
+
   }
 
   void _shake(String message){
@@ -112,8 +102,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
 
   void _onSubmit() {
     if (currentGuess.length == _wordleLength) {
-      if(!words.contains(currentGuess)){
-        print(words.contains(currentGuess));
+      if(!_dictionary[_wordleLength].contains(currentGuess.toLowerCase())){
         _shake('Not word in list');
         return;
       }
@@ -154,26 +143,9 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
     );
   }
 
-  Future<List<String>> loadWords(String dictionary) async {
-    String jsonString = await rootBundle.loadString(dictionary);
-    List<dynamic> jsonResponse = json.decode(jsonString);
-    return jsonResponse.cast<String>();
-  }
-
-  bool wordleRules(String wordle){
-    if(wordle.length != 5 || !(RegExp(r'^[a-zA-Z]+$').hasMatch(wordle))){
-      return false;
-    }
-    return true;
-  }
-
   void _resetGame() {
     setState(() {
-      loadWords("assets/dict/french_words.json").then((words) {
-        do{
-          _wordle =  (words[Random().nextInt(words.length)]).toUpperCase();
-        }while(!wordleRules(_wordle));
-      });
+      _wordle = _dictionary[_wordleLength].elementAt(Random().nextInt(_dictionary[_wordleLength].length)).toUpperCase();
       print(_wordle);
       guesses = [];
       currentGuess = '';

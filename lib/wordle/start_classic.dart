@@ -1,3 +1,4 @@
+import 'package:Wordle/word_list/word_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/button/start_button.dart';
 

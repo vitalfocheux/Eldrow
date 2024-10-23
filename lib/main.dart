@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:Wordle/word_list/word_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/wordle/start_classic.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,7 +61,70 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  int _counter = 0;
+  List<String> dict = ['assets/dict/french_words.json', 'assets/dict/english_words.json', 'assets/dict/spanish_words.json'];
+
+  static Future<List<String>> loadWords(String dictionary) async {
+    String jsonString = await rootBundle.loadString(dictionary);
+    List<dynamic> jsonResponse = json.decode(jsonString);
+    return jsonResponse.cast<String>();
+  }
+
+  bool wordleRules(String wordle){
+    if(!(RegExp(r'^[a-zA-Z]+$').hasMatch(wordle))){
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadWords("assets/dict/french_words.json").then((words) {
+      List<Set<String>> frenchW = [];
+      for (String word in words) {
+        if (wordleRules(word)) {
+          while (frenchW.length <= word.length) {
+            frenchW.add({});
+          }
+          frenchW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().frenchWords = frenchW;
+      });
+    });
+
+    loadWords("assets/dict/english_words.json").then((words) {
+      List<Set<String>> englishW = [];
+      for (String word in words) {
+        if (wordleRules(word)) {
+          while (englishW.length <= word.length) {
+            englishW.add({});
+          }
+          englishW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().englishWords = englishW;
+      });
+    });
+
+    loadWords("assets/dict/spanish_words.json").then((words) {
+      List<Set<String>> spanishW = [];
+      for (String word in words) {
+        if (wordleRules(word)) {
+          while (spanishW.length <= word.length) {
+            spanishW.add({});
+          }
+          spanishW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().spanishWords = spanishW;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
