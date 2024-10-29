@@ -70,7 +70,14 @@ class GameResultDatabase {
 
     Directory current = Directory.current;
     print(current.path);
-    String path = '${current.path}/assets/database/game_results.db';
+    String path = '${current.path}/assets/database';
+
+    final directory = Directory(path);
+    if(!await directory.exists()){
+      await directory.create();
+    }
+
+    path += '/game_results.db';
 
     final file = File(path);
     if(!await file.exists()){
