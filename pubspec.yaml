@@ -63,9 +63,11 @@ flutter:
      - assets/dict/french_words.json
      - assets/dict/english_words.json
      - assets/dict/spanish_words.json
+     - assets/dict/german_words.json
      - assets/flags/fr.png
      - assets/flags/en.png
      - assets/flags/es.png
+     - assets/flags/de.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

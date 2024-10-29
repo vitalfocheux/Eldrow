@@ -1,10 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:Wordle/word_list/word_lists.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../wordle/wordle.dart';
 
@@ -14,7 +11,7 @@ class StartButton extends StatelessWidget {
   final int maxAttemps;
   final List<Set<String>> dictionary;
 
-  StartButton({required this.text, required this.wordleLength, required this.maxAttemps, required this.dictionary});
+  const StartButton({super.key, required this.text, required this.wordleLength, required this.maxAttemps, required this.dictionary});
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +30,19 @@ class StartButton extends StatelessWidget {
 
 class StartButtonFrench extends StartButton {
 
-  StartButtonFrench(context, {required text, required wordleLength, required maxAttemps}) : super(text: text, wordleLength: wordleLength, maxAttemps: maxAttemps, dictionary: WordLists().frenchWords);
+  StartButtonFrench(context, {super.key, required super.text, required super.wordleLength, required super.maxAttemps}) : super(dictionary: WordLists().frenchWords);
 }
 
 class StartButtonEnglish extends StartButton {
 
-  StartButtonEnglish(context, {required text, required wordleLength, required maxAttemps}) : super(text: text, wordleLength: wordleLength, maxAttemps: maxAttemps, dictionary: WordLists().englishWords);
+  StartButtonEnglish(context, {super.key, required super.text, required super.wordleLength, required super.maxAttemps}) : super(dictionary: WordLists().englishWords);
 }
 
 class StartButtonSpanish extends StartButton {
 
-  StartButtonSpanish(context, {required text, required wordleLength, required maxAttemps}) : super(text: text, wordleLength: wordleLength, maxAttemps: maxAttemps, dictionary: WordLists().spanishWords);
+  StartButtonSpanish(context, {super.key, required super.text, required super.wordleLength, required super.maxAttemps}) : super(dictionary: WordLists().spanishWords);
+}
+
+class StartButtonGerman extends StartButton {
+  StartButtonGerman(context, {super.key, required super.text, required super.wordleLength, required super.maxAttemps}) : super(dictionary: WordLists().germanWords);
 }

@@ -1,11 +1,10 @@
 import 'dart:math';
 
-import 'package:Wordle/word_list/word_lists.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Wordle extends StatefulWidget {
-  const Wordle({Key? key, required this.title, required this.wordle, this.maxAttemps = 6, required this.dictionary}) : super(key: key);
+  const Wordle({super.key, required this.title, required this.wordle, this.maxAttemps = 6, required this.dictionary});
 
   final String title;
   final String wordle;
@@ -39,7 +38,9 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
     _wordleLength = _wordle.length;
     _maxAttemps = widget.maxAttemps;
     _dictionary = widget.dictionary;
-    print(_wordle);
+    if (kDebugMode) {
+      print(_wordle);
+    }
 
     _shakeController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -74,14 +75,14 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
         child: Material(
           color: Colors.transparent,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.7),
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Text(
               message,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -89,7 +90,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
     );
 
     overlay.insert(overlayEntry);
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       overlayEntry.remove();
     });
   }
@@ -110,9 +111,9 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
         guesses.add(currentGuess);
         _attemps++;
         if (currentGuess == _wordle) {
-          _showGameOverDialog('Félicitations !', 'Vous avez trouvé le mot !');
+          _showGameOverDialog('Congratulations !', 'You found the word !');
         } else if (_attemps >= _maxAttemps) {
-          _showGameOverDialog('Game Over', 'Le mot était : $_wordle');
+          _showGameOverDialog('Game Over', 'The word was : $_wordle');
         }
         currentGuess = '';
         _controller.clear();
@@ -131,7 +132,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text('Rejouer'),
+              child: const Text('Replay'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _resetGame();
@@ -146,7 +147,9 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
   void _resetGame() {
     setState(() {
       _wordle = _dictionary[_wordleLength].elementAt(Random().nextInt(_dictionary[_wordleLength].length)).toUpperCase();
-      print(_wordle);
+      if (kDebugMode) {
+        print(_wordle);
+      }
       guesses = [];
       currentGuess = '';
       _attemps = 0;
@@ -158,7 +161,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wordle en Flutter'),
+        title: const Text('Wordle en Flutter'),
       ),
       body: GestureDetector(
         onTap: () => _focusNode.requestFocus(),
@@ -176,7 +179,7 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
                 children: [
                   Expanded(
                     child: GridView.builder(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: _wordleLength,
                         childAspectRatio: 1.0,
@@ -211,19 +214,19 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
                           child: Center(
                             child: Text(
                               letter,
-                              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                             ),
                           ),
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _onSubmit,
-                    child: Text('Submit'),
+                    child: const Text('Submit'),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
               Opacity(

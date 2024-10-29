@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:Wordle/button/start_button.dart';
 
 class StartClassic extends StatefulWidget{
+  const StartClassic({super.key});
+
   @override
   _StartClassicState createState() => _StartClassicState();
 }
@@ -18,15 +20,15 @@ class _StartClassicState extends State<StartClassic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classic Wordle'),
+        title: const Text('Classic Wordle'),
       ),
       body: Center(
         child: Column(
           children: [
-            Text('Choose the length of word'),
+            const Text('Choose the length of word'),
             DropdownButton<String>(
               value: _selectedValueLenght,
-              hint: Text('Select a value'),
+              hint: const Text('Select a value'),
               items: <String>['3', '4', '5', '6', '7', '8', '9'].map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -40,10 +42,10 @@ class _StartClassicState extends State<StartClassic> {
                 });
               },
             ),
-            Text('Choose the number of attemps'),
+            const Text('Choose the number of attemps'),
             DropdownButton<String>(
               value: _selectedValueAttempts,
-              hint: Text('Select a value'),
+              hint: const Text('Select a value'),
               items: <String>['3', '4', '5', '6', '7', '8', '9'].map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -57,18 +59,18 @@ class _StartClassicState extends State<StartClassic> {
                 });
               },
             ),
-            Text('Choisissez la langue'),
+            const Text('Choose the language'),
             DropdownButton<String>(
                 value: _selectedLanguage,
-                hint: Text('Choisissez une langue'),
+                hint: const Text('Choose a language'),
                 items: [
                   DropdownMenuItem(
                       value: 'fr',
                       child: Row(
                         children: [
                           Image.asset('assets/flags/fr.png', width: 24,),
-                          SizedBox(width: 8,),
-                          Text('French'),
+                          const SizedBox(width: 8,),
+                          const Text('French'),
                         ],
                       )
                   ),
@@ -77,8 +79,8 @@ class _StartClassicState extends State<StartClassic> {
                     child: Row(
                       children: [
                         Image.asset('assets/flags/en.png', width: 24,),
-                        SizedBox(width: 8,),
-                        Text('English'),
+                        const SizedBox(width: 8,),
+                        const Text('English'),
                       ],
                     )
                   ),
@@ -87,8 +89,18 @@ class _StartClassicState extends State<StartClassic> {
                       child: Row(
                         children: [
                           Image.asset('assets/flags/es.png', width: 24,),
-                          SizedBox(width: 8,),
-                          Text('Spanish'),
+                          const SizedBox(width: 8,),
+                          const Text('Spanish'),
+                        ],
+                      )
+                  ),
+                  DropdownMenuItem(
+                      value: 'de',
+                      child: Row(
+                        children: [
+                          Image.asset('assets/flags/de.png', width: 24,),
+                          const SizedBox(width: 8,),
+                          const Text('German'),
                         ],
                       )
                   ),
@@ -102,6 +114,7 @@ class _StartClassicState extends State<StartClassic> {
             if(_selectedLanguage == 'fr') StartButtonFrench(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
             if(_selectedLanguage == 'en') StartButtonEnglish(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
             if(_selectedLanguage == 'es') StartButtonSpanish(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
+            if(_selectedLanguage == 'de') StartButtonGerman(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
           ],
         ),
       ),

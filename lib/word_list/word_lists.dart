@@ -11,4 +11,5 @@ class WordLists {
   List<Set<String>> frenchWords = [];
   List<Set<String>> englishWords = [];
   List<Set<String>> spanishWords = [];
+  List<Set<String>> germanWords = [];
 }

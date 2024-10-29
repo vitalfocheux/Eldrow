@@ -124,6 +124,21 @@ class _MyHomePageState extends State<MyHomePage> {
         WordLists().spanishWords = spanishW;
       });
     });
+
+    loadWords("assets/dict/german_words.json").then((words) {
+      List<Set<String>> germanW = [];
+      for (String word in words) {
+        if (wordleRules(word)) {
+          while (germanW.length <= word.length) {
+            germanW.add({});
+          }
+          germanW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().germanWords = germanW;
+      });
+    });
   }
 
   @override
@@ -167,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StartClassic()),
+                    MaterialPageRoute(builder: (context) => const StartClassic()),
                   );
                 },
                 child: const Text('Wordle Classic')
