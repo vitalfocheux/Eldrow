@@ -4,6 +4,9 @@ import 'package:Wordle/word_list/word_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/wordle/start_classic.dart';
 import 'package:flutter/services.dart';
+import 'package:sqflite/sqflite.dart';
+
+import 'db.dart';
 
 void main() {
   runApp(const MyApp());
@@ -59,8 +62,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  late Future<Database> db;
   List<String> dict = ['assets/dict/french_words.json', 'assets/dict/english_words.json', 'assets/dict/spanish_words.json'];
 
   static Future<List<String>> loadWords(String dictionary) async {
@@ -79,7 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
+    db = GameResultDatabase.instance.database;
+    WidgetsBinding.instance.addObserver(this);
     loadWords("assets/dict/french_words.json").then((words) {
       List<Set<String>> frenchW = [];
       for (String word in words) {
@@ -139,6 +143,33 @@ class _MyHomePageState extends State<MyHomePage> {
         WordLists().germanWords = germanW;
       });
     });
+    /*GameResultDatabase.instance.fetchAllResults().then((results) {
+      print('Results');
+      for(GameResult result in results){
+        print('DB : $result');
+      }
+    });
+    GameResultDatabase.instance.insertGameResult(new GameResult(word: "test", attempts: 6, success: true, date: new DateTime(2024), mode: "classic"));
+    GameResultDatabase.instance.fetchAllResults().then((results) {
+      print('DB');
+      for(GameResult result in results){
+        print('DB : $result');
+      }
+    });*/
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    GameResultDatabase.instance.close();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached){
+      GameResultDatabase.instance.close();
+    }
   }
 
   @override
