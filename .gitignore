@@ -31,21 +31,6 @@ migrate_working_dir/
 .pub/
 /build/
 
-# iOS related
-**/ios/*
-
-# Linux related
-**/linux/*
-
-# macOS related
-**/macos/*
-
-# Windows related
-**/windows/*
-
-# Web related
-**/web/*
-
 # Symbolication related
 app.*.symbols
 

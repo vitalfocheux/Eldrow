@@ -1,6 +1,6 @@
-# projet
+# wordle
 
-A new Flutter project.
+Wordle
 
 ## Getting Started
 
