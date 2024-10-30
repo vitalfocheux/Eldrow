@@ -24,6 +24,7 @@ class _StartClassicState extends State<StartClassic> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Choose the length of word'),
             DropdownButton<String>(

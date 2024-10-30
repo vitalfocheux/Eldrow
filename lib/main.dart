@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Wordle/word_list/word_lists.dart';
+import 'package:Wordle/wordle/wordle_choose.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/wordle/start_classic.dart';
 import 'package:flutter/services.dart';
@@ -213,10 +214,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const StartClassic()),
+                    MaterialPageRoute(builder: (context) => WordleChoose(title: '',)),
                   );
                 },
-                child: const Text('Wordle Classic')
+                child: const Text('Choose a gamemode')
             ),
           ],
         ),
