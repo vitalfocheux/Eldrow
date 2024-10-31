@@ -1,15 +1,17 @@
 import 'dart:math';
 
+import 'package:Wordle/db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Wordle extends StatefulWidget {
-  const Wordle({super.key, required this.title, required this.wordle, this.maxAttemps = 6, required this.dictionary});
+  const Wordle({super.key, required this.title, required this.wordle, this.maxAttemps = 6, required this.dictionary, required this.language});
 
   final String title;
   final String wordle;
   final int maxAttemps;
   final List<Set<String>> dictionary;
+  final String language;
 
   @override
   State<Wordle> createState() => _WordleState();
@@ -110,11 +112,15 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
       setState(() {
         guesses.add(currentGuess);
         _attemps++;
+        late bool success;
         if (currentGuess == _wordle) {
           _showGameOverDialog('Congratulations !', 'You found the word !');
+          success = true;
         } else if (_attemps >= _maxAttemps) {
           _showGameOverDialog('Game Over', 'The word was : $_wordle');
+          success = false;
         }
+        GameResultDatabase.instance.insertGameResult(new GameResult(word: _wordle, attempts: _attemps, success: success, date: DateTime.now(), mode: 'classic', winStreak: 0, language: widget.language));
         currentGuess = '';
         _controller.clear();
       });
