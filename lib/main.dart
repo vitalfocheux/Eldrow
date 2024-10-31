@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:Wordle/stats/StatPage.dart';
 import 'package:Wordle/word_list/word_lists.dart';
 import 'package:Wordle/wordle/wordle_choose.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/wordle/start_classic.dart';
 import 'package:flutter/services.dart';
@@ -144,6 +146,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         WordLists().germanWords = germanW;
       });
     });
+    GameResultDatabase.instance.fetchAllResults().then((results) {
+      if (kDebugMode) {
+        print("DB SIZE ${results.length}");
+      }
+      for(GameResult result in results){
+        if (kDebugMode) {
+          print('DB : $result');
+        }
+      }
+    });
     /*GameResultDatabase.instance.fetchAllResults().then((results) {
       print('Results');
       for(GameResult result in results){
@@ -214,10 +226,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => WordleChoose(title: '',)),
+                    MaterialPageRoute(builder: (context) => WordleChoose(title: 'Gameplay Wordle',)),
                   );
                 },
-                child: const Text('Choose a gamemode')
+                child: const Text('Choose a gameplay')
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StatPage(title: 'Stats Wordle'))
+                  );
+                },
+                child: const Text('Stats Wordle')
             ),
           ],
         ),
