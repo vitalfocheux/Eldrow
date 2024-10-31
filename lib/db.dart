@@ -11,8 +11,10 @@ class GameResult {
   final bool success;
   final DateTime date;
   final String mode;
+  final int winStreak;
+  final String language;
 
-  GameResult({this.id, required this.word, required this.attempts, required this.success, required this.date, required this.mode});
+  GameResult({this.id, required this.word, required this.attempts, required this.success, required this.date, required this.mode, required this.winStreak, required this.language});
 
   Map<String, dynamic> toMap() {
     return {
@@ -22,6 +24,8 @@ class GameResult {
       'success': success ? 1 : 0,
       'date': date.toIso8601String(),
       'mode': mode,
+      'winStreak': winStreak,
+      'language': language,
     };
   }
 
@@ -33,6 +37,8 @@ class GameResult {
       success: map['success'] == 1,
       date: DateTime.parse(map['date']),
       mode: map['mode'],
+      winStreak: map['winStreak'],
+      language: map['language'],
     );
   }
 
@@ -99,7 +105,9 @@ class GameResultDatabase {
       attempts INTEGER NOT NULL,
       success INTEGER NOT NULL,
       date TEXT NOT NULL,
-      mode TEXT NOT NULL
+      mode TEXT NOT NULL,
+      winStreak INTEGER NOT NULL,
+      language TEXT NOT NULL
     )
     ''');
   }
