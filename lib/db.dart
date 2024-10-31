@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:path/path.dart' as path;
 
 class GameResult {
   final int? id;
@@ -71,27 +72,23 @@ class GameResultDatabase {
   }
 
   Future<Database> _initDB() async {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-
-    Directory current = Directory.current;
-    print(current.path);
-    String path = '${current.path}/assets/database';
-
-    final directory = Directory(path);
-    if(!await directory.exists()){
-      await directory.create();
+    if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
     }
 
-    path += '/game_results.db';
+    String dbPath;
 
-    final file = File(path);
-    if(!await file.exists()){
-      await file.create();
+    if(Platform.isAndroid || Platform.isIOS){
+      var databasesPath = await getDatabasesPath();
+      dbPath = path.join(databasesPath, 'game_results.db');
+    }else{
+      var directory = Directory.systemTemp;
+      dbPath = path.join(directory.path, 'game_results.db');
     }
 
     return await openDatabase(
-      path,
+      dbPath,
       version: 1,
       onCreate: _createDB,
     );
