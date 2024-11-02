@@ -1,5 +1,6 @@
 import 'package:Wordle/db.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LastGameHistory extends StatefulWidget {
 
@@ -30,15 +31,24 @@ class _LastGameHistoryState extends State<LastGameHistory> {
             return Center(child: Text('No results found'));
           }else{
             final results = snapshot.data!;
+            results.sort((a, b) => b.date.compareTo(a.date));
             return ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: results.length,
               itemBuilder: (context, index){
                 final result = results[index];
                 return ListTile(
-                  title: Text(result.word),
-                  subtitle: Text('${result.attempts} attempts - ${result.success ? 'Success' : 'Failure'}'),
-                  trailing: Text(result.date.toIso8601String()),
+                  leading: Image.asset('assets/flags/${result.language}.png', width: 40, height: 40,),
+                  //title: Text(result.word),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(result.word),
+                      Text(result.mode, style: const TextStyle(fontSize: 12, color: Colors.grey),)
+                    ],
+                  ),
+                  subtitle: Text("${result.attempts} ${(result.attempts == 1) ? 'attemp' : 'attemps'} - ${result.success ? 'Success' : 'Failure'}"),
+                  trailing: Text(DateFormat('dd/MM/yyyy HH:mm').format(result.date)),
                 );
               },
             );
