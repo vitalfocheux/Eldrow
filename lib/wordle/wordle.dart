@@ -112,15 +112,13 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
       setState(() {
         guesses.add(currentGuess);
         _attemps++;
-        late bool success;
         if (currentGuess == _wordle) {
           _showGameOverDialog('Congratulations !', 'You found the word !');
-          success = true;
+          GameResultDatabase.instance.insertGameResult(GameResult(word: _wordle, attempts: _attemps, success: true, date: DateTime.now(), mode: 'classic', winStreak: 0, language: widget.language));
         } else if (_attemps >= _maxAttemps) {
           _showGameOverDialog('Game Over', 'The word was : $_wordle');
-          success = false;
+          GameResultDatabase.instance.insertGameResult(GameResult(word: _wordle, attempts: _attemps, success: false, date: DateTime.now(), mode: 'classic', winStreak: 0, language: widget.language));
         }
-        GameResultDatabase.instance.insertGameResult(new GameResult(word: _wordle, attempts: _attemps, success: success, date: DateTime.now(), mode: 'classic', winStreak: 0, language: widget.language));
         currentGuess = '';
         _controller.clear();
       });
