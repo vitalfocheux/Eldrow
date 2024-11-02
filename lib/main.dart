@@ -240,6 +240,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 },
                 child: const Text('Stats Wordle')
             ),
+            if(kDebugMode)
+              ElevatedButton(
+                onPressed: () {
+                  GameResultDatabase.instance.deleteAllResults();
+                },
+                child: const Text('Supprimer la db'),
+              ),
           ],
         ),
       ),
