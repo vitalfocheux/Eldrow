@@ -1,4 +1,5 @@
 import 'package:Wordle/stats/LastGameHistory.dart';
+import 'package:Wordle/stats/PersonnalStats.dart';
 import 'package:flutter/material.dart';
 
 class StatPage extends StatefulWidget {
@@ -35,7 +36,11 @@ class _StatPageState extends State<StatPage> {
                   child: const Text('History of last game'),
               ),
               ElevatedButton(
-                  onPressed: null,
+                  onPressed: () {
+                    Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => const PersonnalStats()));
+                  },
                   child: const Text('Personnal Stats'),
               ),
             ],
