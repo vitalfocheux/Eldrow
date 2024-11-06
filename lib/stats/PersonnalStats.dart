@@ -12,19 +12,20 @@ class PersonnalStats extends StatefulWidget {
 }
 
 class _PersonnalStatsState extends State<PersonnalStats> {
-
-  Future<List<PieChartSectionData>> _PieChartClassic() async {
-    int totalClassic = 0;
-    int successClassic = 0;
-    final results = await GameResultDatabase.instance.fetchResultsByMode("classic");
-    totalClassic = results.length;
-    for (var result in results) {
-      if (result.success) {
-        successClassic++;
+  
+  Future<Widget> _PieChartMode(String mode) async {
+    int total = 0;
+    int success = 0;
+    final results = await GameResultDatabase.instance.fetchResultsByMode(mode);
+    total = results.length;
+    for(var result in results){
+      if(result.success){
+        success++;
       }
     }
-    if(totalClassic == 0){
-      return [
+    List<PieChartSectionData> sections;
+    if(total == 0){
+      sections = [
         PieChartSectionData(
           color: Colors.grey,
           value: 100, // Valeur de la section (40%)
@@ -32,23 +33,51 @@ class _PersonnalStatsState extends State<PersonnalStats> {
           radius: 50,
         ),
       ];
+    }else{
+      sections = [
+        PieChartSectionData(
+          color: Colors.green,
+          value: (success / total) * 100, // Valeur de la section (40%)
+          title: '${(success / total) * 100}', // Étiquette de la section
+          radius: 50,
+          titleStyle: const TextStyle(color: Colors.white),
+        ),
+        PieChartSectionData(
+          color: Colors.red,
+          value: ((total - success) / total) * 100, // Valeur de la section (30%)
+          title: '${((total - success) / total) * 100}',
+          radius: 50,
+          titleStyle: const TextStyle(color: Colors.white),
+        ),
+      ];
     }
-    return [
-      PieChartSectionData(
-        color: Colors.green,
-        value: (successClassic / totalClassic) * 100, // Valeur de la section (40%)
-        title: '${(successClassic / totalClassic) * 100}', // Étiquette de la section
-        radius: 50,
-        titleStyle: const TextStyle(color: Colors.white),
-      ),
-      PieChartSectionData(
-        color: Colors.red,
-        value: ((totalClassic - successClassic) / totalClassic) * 100, // Valeur de la section (30%)
-        title: '${((totalClassic - successClassic) / totalClassic) * 100}',
-        radius: 50,
-        titleStyle: const TextStyle(color: Colors.white),
-      ),
-    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '${mode[0].toUpperCase()}${mode.substring(1)} mode',
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: PieChart(
+              PieChartData(
+                sections: sections,
+                centerSpaceRadius: 50,
+                sectionsSpace: 2,
+                borderData: FlBorderData(show: false),
+              ),
+          ),
+        ),
+        const SizedBox(height: 20,),
+        _buildLegend(sections),
+      ],
+    );
   }
 
   Widget _buildLegend(List<PieChartSectionData> sections){
@@ -83,46 +112,43 @@ class _PersonnalStatsState extends State<PersonnalStats> {
       appBar: AppBar(
         title: Text("Graphique en camembert"),
       ),
-      body: Center(
-        child: FutureBuilder<List<PieChartSectionData>>(
-            future: _PieChartClassic(),
-            builder: (context, snapshot) {
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return CircularProgressIndicator();
-              }else if(snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              }else if(!snapshot.hasData || snapshot.data!.isEmpty){
-                return Text('No data found');
-              }else{
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                        'Classic mode',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                        ),
-                    ),
-                    SizedBox(
-                        height: 200,
-                        child: PieChart(
-                          PieChartData(
-                            sections: snapshot.data!,
-                            centerSpaceRadius: 50,
-                            sectionsSpace: 2,
-                            borderData: FlBorderData(show: false),
-                          ),
-                        ),
-                    ),
-                    const SizedBox(height: 20,),
-                    _buildLegend(snapshot.data!),
-                  ],
-                );
-              }
-            }
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              FutureBuilder<Widget>(
+                  future: _PieChartMode("classic"),
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      return CircularProgressIndicator();
+                    }else if(snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }else if(!snapshot.hasData){
+                      return Text('No data found');
+                    }else{
+                      return snapshot.data!;
+                    }
+                  }
+              ),
+              FutureBuilder<Widget>(
+                  future: _PieChartMode("survival"),
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      return CircularProgressIndicator();
+                    }else if(snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }else if(!snapshot.hasData){
+                      return Text('No data found');
+                    }else{
+                      return snapshot.data!;
+                    }
+                  }
+              ),
+            ],
+          ),
         ),
-      ),
+      )
+
     );
   }
 
