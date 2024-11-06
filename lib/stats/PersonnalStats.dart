@@ -14,6 +14,8 @@ class PersonnalStats extends StatefulWidget {
 class _PersonnalStatsState extends State<PersonnalStats> {
   
   Future<Widget> _PieChartMode(String mode) async {
+    Map<Color, String> sectionsLegend = {};
+
     int total = 0;
     int success = 0;
     final results = await GameResultDatabase.instance.fetchResultsByMode(mode);
@@ -25,6 +27,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
     }
     List<PieChartSectionData> sections;
     if(total == 0){
+      sectionsLegend[Colors.grey] = 'No data';
       sections = [
         PieChartSectionData(
           color: Colors.grey,
@@ -34,6 +37,8 @@ class _PersonnalStatsState extends State<PersonnalStats> {
         ),
       ];
     }else{
+      sectionsLegend[Colors.green] = 'Success';
+      sectionsLegend[Colors.red] = 'Failure';
       sections = [
         PieChartSectionData(
           color: Colors.green,
@@ -75,30 +80,100 @@ class _PersonnalStatsState extends State<PersonnalStats> {
           ),
         ),
         const SizedBox(height: 20,),
-        _buildLegend(sections),
+        _buildLegend(sectionsLegend),
+        const SizedBox(height: 50,),
       ],
     );
   }
 
-  Widget _buildLegend(List<PieChartSectionData> sections){
+  Future<Widget> _PieChartLanguage() async {
+    final results = await GameResultDatabase.instance.fetchAllResults();
+    Map<String, int> languages = {};
+
+    Map<Color, String> sectionsLegend = {
+      Colors.red: 'French',
+      Colors.blue: 'English',
+      Colors.yellow: 'Spanish',
+      Colors.black: 'German',
+      Colors.green: 'Italian',
+      Colors.purple: 'Portuguese',
+    };
+
+    for(var result in results){
+      if(languages.containsKey(result.language)){
+        languages[result.language] = languages[result.language]! + 1;
+      }else{
+        languages[result.language] = 1;
+      }
+    }
+
+    List<PieChartSectionData> sections;
+    if(languages.isEmpty){
+      sections = [
+        PieChartSectionData(
+          color: Colors.grey,
+          value: 100, // Valeur de la section (40%)
+          title: '', // Étiquette de la section
+          radius: 50,
+        ),
+      ];
+    }else {
+      sections = languages.entries.map((entry) {
+        return PieChartSectionData(
+          color: sectionsLegend.keys.elementAt(languages.keys.toList().indexOf(entry.key)),
+          value: (entry.value / languages.values.reduce((a, b) => a + b)) * 100, // Valeur de la section (40%)
+          title: '${(entry.value / languages.values.reduce((a, b) => a + b)) * 100}', // Étiquette de la section
+          radius: 50,
+          titleStyle: const TextStyle(color: Colors.white),
+        );
+      }).toList();
+    }
+
+
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Languages',
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: PieChart(
+            PieChartData(
+              sections: sections,
+              centerSpaceRadius: 50,
+              sectionsSpace: 2,
+              borderData: FlBorderData(show: false),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20,),
+        _buildLegend(sectionsLegend),
+        const SizedBox(height: 50,),
+      ],
+    );
+  }
+
+  Widget _buildLegend(Map<Color, String> sections){
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: sections.map((section) {
+      children: sections.entries.map((entry) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: 16,
               height: 16,
-              color: section.color,
+              color: entry.key,
             ),
             const SizedBox(width: 8,),
-            if(section.color == Colors.green)
-              const Text('Success'),
-            if(section.color == Colors.red)
-              const Text('Failure'),
-            if(section.color == Colors.grey)
-              const Text('No data'),
+            Text(entry.value),
             const SizedBox(width: 16,)
           ],
         );
@@ -144,6 +219,20 @@ class _PersonnalStatsState extends State<PersonnalStats> {
                     }
                   }
               ),
+              FutureBuilder<Widget>(
+                future: _PieChartLanguage(),
+                builder: (context, snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return CircularProgressIndicator();
+                  }else if(snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }else if(!snapshot.hasData){
+                    return Text('No data found');
+                  }else{
+                    return snapshot.data!;
+                  }
+                }
+              )
             ],
           ),
         ),
