@@ -43,14 +43,14 @@ class _PersonnalStatsState extends State<PersonnalStats> {
         PieChartSectionData(
           color: Colors.green,
           value: (success / total) * 100, // Valeur de la section (40%)
-          title: '${(success / total) * 100}', // Étiquette de la section
+          title: '${(success / total) * 100}%', // Étiquette de la section
           radius: 50,
           titleStyle: const TextStyle(color: Colors.white),
         ),
         PieChartSectionData(
           color: Colors.red,
           value: ((total - success) / total) * 100, // Valeur de la section (30%)
-          title: '${((total - success) / total) * 100}',
+          title: '${((total - success) / total) * 100}%',
           radius: 50,
           titleStyle: const TextStyle(color: Colors.white),
         ),
@@ -122,7 +122,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
         return PieChartSectionData(
           color: sectionsLegend.keys.elementAt(languages.keys.toList().indexOf(entry.key)),
           value: (entry.value / languages.values.reduce((a, b) => a + b)) * 100, // Valeur de la section (40%)
-          title: '${(entry.value / languages.values.reduce((a, b) => a + b)) * 100}', // Étiquette de la section
+          title: '${((entry.value / languages.values.reduce((a, b) => a + b)) * 100).toStringAsFixed(1)}%', // Étiquette de la section
           radius: 50,
           titleStyle: const TextStyle(color: Colors.white),
         );
