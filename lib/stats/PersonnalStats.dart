@@ -16,6 +16,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
   Future<Widget> _PieChartMode(String mode) async {
     Map<Color, String> sectionsLegend = {};
 
+    int bestStreak = 0;
     int total = 0;
     int success = 0;
     final results = await GameResultDatabase.instance.fetchResultsByMode(mode);
@@ -23,6 +24,9 @@ class _PersonnalStatsState extends State<PersonnalStats> {
     for(var result in results){
       if(result.success){
         success++;
+      }
+      if(result.winStreak > bestStreak){
+        bestStreak = result.winStreak;
       }
     }
     List<PieChartSectionData> sections;
@@ -68,19 +72,61 @@ class _PersonnalStatsState extends State<PersonnalStats> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(
-          height: 200,
-          child: PieChart(
-              PieChartData(
-                sections: sections,
-                centerSpaceRadius: 50,
-                sectionsSpace: 2,
-                borderData: FlBorderData(show: false),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 200,
+                    child: PieChart(
+                      PieChartData(
+                        sections: sections,
+                        centerSpaceRadius: 50,
+                        sectionsSpace: 2,
+                        borderData: FlBorderData(show: false),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20,),
+                  _buildLegend(sectionsLegend),
+                ],
               ),
-          ),
+            ),
+            Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total: $total',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Success: $success',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if(mode == 'survival') Text(
+                      'Best streak: $bestStreak',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+            ),
+          ],
         ),
-        const SizedBox(height: 20,),
-        _buildLegend(sectionsLegend),
         const SizedBox(height: 50,),
       ],
     );
