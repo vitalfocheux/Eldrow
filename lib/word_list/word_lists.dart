@@ -12,4 +12,7 @@ class WordLists {
   List<Set<String>> englishWords = [];
   List<Set<String>> spanishWords = [];
   List<Set<String>> germanWords = [];
+  List<Set<String>> italianWords = [];
+  List<Set<String>> portugueseWords = [];
+  List<Set<String>> swedishWords = [];
 }

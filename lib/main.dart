@@ -146,6 +146,52 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         WordLists().germanWords = germanW;
       });
     });
+
+    loadWords("assets/dict/italian_words.json").then((words) {
+      List<Set<String>> italianW = [];
+      for(String word in words){
+        if(wordleRules(word)){
+          while(italianW.length <= word.length){
+            italianW.add({});
+          }
+          italianW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().italianWords = italianW;
+      });
+    });
+
+    loadWords("assets/dict/portuguese_words.json").then((words) {
+      List<Set<String>> portugueseW = [];
+      for(String word in words){
+        if(wordleRules(word)){
+          while(portugueseW.length <= word.length){
+            portugueseW.add({});
+          }
+          portugueseW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().portugueseWords = portugueseW;
+      });
+    });
+
+    loadWords("assets/dict/swedish_words.json").then((words) {
+      List<Set<String>> swedishW = [];
+      for(String word in words){
+        if(wordleRules(word)){
+          while(swedishW.length <= word.length){
+            swedishW.add({});
+          }
+          swedishW.elementAt(word.length).add(word);
+        }
+      }
+      setState(() {
+        WordLists().swedishWords = swedishW;
+      });
+    });
+
     GameResultDatabase.instance.fetchAllResults().then((results) {
       if (kDebugMode) {
         print("DB SIZE ${results.length}");

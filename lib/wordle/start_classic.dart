@@ -1,3 +1,4 @@
+import 'package:Wordle/word_list/word_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/button/start_button.dart';
 
@@ -105,6 +106,36 @@ class _StartClassicState extends State<StartClassic> {
                         ],
                       )
                   ),
+                  DropdownMenuItem(
+                    value: 'it',
+                    child: Row(
+                      children: [
+                        Image.asset('assets/flags/it.png', width: 24,),
+                        const SizedBox(width: 8,),
+                        const Text('Italian'),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 'pt',
+                    child: Row(
+                      children: [
+                        Image.asset('assets/flags/pt.png', width: 24,),
+                        const SizedBox(width: 8,),
+                        const Text('Portuguese'),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 'sw',
+                    child: Row(
+                      children: [
+                        Image.asset('assets/flags/sw.png', width: 24,),
+                        const SizedBox(width: 8,),
+                        const Text('Swedish'),
+                      ],
+                    ),
+                  ),
                 ],
                 onChanged: (String? value) {
                   setState(() {
@@ -116,6 +147,9 @@ class _StartClassicState extends State<StartClassic> {
             if(_selectedLanguage == 'en') StartButtonEnglish(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
             if(_selectedLanguage == 'es') StartButtonSpanish(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
             if(_selectedLanguage == 'de') StartButtonGerman(context, text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts,),
+            if(_selectedLanguage == 'it') StartButton(text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts, dictionary: WordLists().italianWords, language: 'it',),
+            if(_selectedLanguage == 'pt') StartButton(text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts, dictionary: WordLists().portugueseWords, language: 'pt',),
+            if(_selectedLanguage == 'sw') StartButton(text: 'Start Wordle Classic', wordleLength: wordleLength, maxAttemps: wordleAttempts, dictionary: WordLists().swedishWords, language: 'sw',),
           ],
         ),
       ),
