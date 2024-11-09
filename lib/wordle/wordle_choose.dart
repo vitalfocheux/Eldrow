@@ -18,7 +18,7 @@ class _WordleChooseState extends State<WordleChoose> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wordle en Flutter'),
+        title: Text(widget.title),
       ),
       body: Container(
         child: Center(
@@ -37,6 +37,10 @@ class _WordleChooseState extends State<WordleChoose> {
               const ElevatedButton(
                   onPressed: null,
                   child: Text('Survival Wordle'),
+              ),
+              const ElevatedButton(
+                onPressed: null,
+                child: Text("Dual Wordle"),
               ),
             ],
           ),
