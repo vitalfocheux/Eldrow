@@ -137,12 +137,13 @@ class _PersonnalStatsState extends State<PersonnalStats> {
     Map<String, int> languages = {};
 
     Map<Color, String> sectionsLegend = {
-      Colors.red: 'French',
-      Colors.blue: 'English',
-      Colors.yellow: 'Spanish',
-      Colors.black: 'German',
-      Colors.green: 'Italian',
-      Colors.purple: 'Portuguese',
+      Colors.red: 'fr,French',
+      Colors.blue: 'en,English',
+      Colors.yellow: 'es,Spanish',
+      Colors.black: 'de,German',
+      Colors.green: 'it,Italian',
+      Colors.purple: 'pt,Portuguese',
+      Colors.cyan: 'sw,Swedish',
     };
 
     for(var result in results){
@@ -166,7 +167,8 @@ class _PersonnalStatsState extends State<PersonnalStats> {
     }else {
       sections = languages.entries.map((entry) {
         return PieChartSectionData(
-          color: sectionsLegend.keys.elementAt(languages.keys.toList().indexOf(entry.key)),
+          //color: sectionsLegend.keys.elementAt(languages.keys.toList().indexOf(entry.key)),
+          color: sectionsLegend.keys.firstWhere((element) => sectionsLegend[element]!.split(',')[0] == entry.key),
           value: (entry.value / languages.values.reduce((a, b) => a + b)) * 100, // Valeur de la section (40%)
           title: '${((entry.value / languages.values.reduce((a, b) => a + b)) * 100).toStringAsFixed(1)}%', // Étiquette de la section
           radius: 50,
@@ -175,7 +177,9 @@ class _PersonnalStatsState extends State<PersonnalStats> {
       }).toList();
     }
 
-
+    sectionsLegend.forEach((key, value) {
+      sectionsLegend[key] = value.split(',')[1];
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
