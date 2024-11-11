@@ -99,7 +99,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
             Expanded(
                 flex: 1,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Total: $total',
@@ -185,9 +185,9 @@ class _PersonnalStatsState extends State<PersonnalStats> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           'Languages',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -211,7 +211,26 @@ class _PersonnalStatsState extends State<PersonnalStats> {
   }
 
   Widget _buildLegend(Map<Color, String> sections){
-    return Row(
+    return Wrap(
+      alignment: WrapAlignment.center,
+    spacing: 16.0,
+    runSpacing: 8.0,
+    children: sections.entries.map((entry) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 16,
+            height: 16,
+            color: entry.key,
+          ),
+          const SizedBox(width: 8,),
+          Text(entry.value),
+          const SizedBox(width: 16,)
+        ],
+      );
+    }).toList(),
+    /*return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: sections.entries.map((entry) {
         return Row(
@@ -227,7 +246,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
             const SizedBox(width: 16,)
           ],
         );
-      }).toList(),
+      }).toList(),*/
     );
   }
 
