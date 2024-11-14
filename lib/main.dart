@@ -5,7 +5,6 @@ import 'package:Wordle/word_list/word_lists.dart';
 import 'package:Wordle/wordle/wordle_choose.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Wordle/wordle/start_classic.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -82,115 +81,88 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     return true;
   }
 
+  List<Set<String>> _processWords(List<String> words){
+    List<Set<String>> processedWords = [];
+    for(String word in words){
+      if(wordleRules(word)){
+        while(processedWords.length <= word.length){
+          processedWords.add({});
+        }
+        processedWords.elementAt(word.length).add(word);
+      }
+    }
+    return processedWords;
+  }
+
   @override
   void initState() {
     super.initState();
     db = GameResultDatabase.instance.database;
     WidgetsBinding.instance.addObserver(this);
-    loadWords("assets/dict/french_words.json").then((words) {
-      List<Set<String>> frenchW = [];
-      for (String word in words) {
-        if (wordleRules(word)) {
-          while (frenchW.length <= word.length) {
-            frenchW.add({});
-          }
-          frenchW.elementAt(word.length).add(word);
-        }
-      }
+    /*loadWords("assets/dict/french_words.json").then((words) {
       setState(() {
-        WordLists().frenchWords = frenchW;
+        WordLists().frenchWords = _processWords(words);
       });
     });
 
     loadWords("assets/dict/english_words.json").then((words) {
-      List<Set<String>> englishW = [];
-      for (String word in words) {
-        if (wordleRules(word)) {
-          while (englishW.length <= word.length) {
-            englishW.add({});
-          }
-          englishW.elementAt(word.length).add(word);
-        }
-      }
       setState(() {
-        WordLists().englishWords = englishW;
+        WordLists().englishWords = _processWords(words);
       });
     });
 
     loadWords("assets/dict/spanish_words.json").then((words) {
-      List<Set<String>> spanishW = [];
-      for (String word in words) {
-        if (wordleRules(word)) {
-          while (spanishW.length <= word.length) {
-            spanishW.add({});
-          }
-          spanishW.elementAt(word.length).add(word);
-        }
-      }
       setState(() {
-        WordLists().spanishWords = spanishW;
+        WordLists().spanishWords = _processWords(words);
       });
     });
 
     loadWords("assets/dict/german_words.json").then((words) {
-      List<Set<String>> germanW = [];
-      for (String word in words) {
-        if (wordleRules(word)) {
-          while (germanW.length <= word.length) {
-            germanW.add({});
-          }
-          germanW.elementAt(word.length).add(word);
-        }
-      }
       setState(() {
-        WordLists().germanWords = germanW;
+        WordLists().germanWords = _processWords(words);
       });
     });
 
     loadWords("assets/dict/italian_words.json").then((words) {
-      List<Set<String>> italianW = [];
-      for(String word in words){
-        if(wordleRules(word)){
-          while(italianW.length <= word.length){
-            italianW.add({});
-          }
-          italianW.elementAt(word.length).add(word);
-        }
-      }
       setState(() {
-        WordLists().italianWords = italianW;
+        WordLists().italianWords = _processWords(words);
       });
     });
 
     loadWords("assets/dict/portuguese_words.json").then((words) {
-      List<Set<String>> portugueseW = [];
-      for(String word in words){
-        if(wordleRules(word)){
-          while(portugueseW.length <= word.length){
-            portugueseW.add({});
-          }
-          portugueseW.elementAt(word.length).add(word);
-        }
-      }
       setState(() {
-        WordLists().portugueseWords = portugueseW;
+        WordLists().portugueseWords = _processWords(words);
       });
     });
 
     loadWords("assets/dict/swedish_words.json").then((words) {
-      List<Set<String>> swedishW = [];
-      for(String word in words){
-        if(wordleRules(word)){
-          while(swedishW.length <= word.length){
-            swedishW.add({});
-          }
-          swedishW.elementAt(word.length).add(word);
-        }
-      }
       setState(() {
-        WordLists().swedishWords = swedishW;
+        WordLists().swedishWords = _processWords(words);
+      });
+    });*/
+
+
+    Future.wait([
+      loadWords("assets/dict/french_words.json"),
+      loadWords("assets/dict/english_words.json"),
+      loadWords("assets/dict/spanish_words.json"),
+      loadWords("assets/dict/german_words.json"),
+      loadWords("assets/dict/italian_words.json"),
+      loadWords("assets/dict/portuguese_words.json"),
+      loadWords("assets/dict/swedish_words.json"),
+    ]).then((results) {
+      setState(() {
+        WordLists().frenchWords = _processWords(results[0]);
+        WordLists().englishWords = _processWords(results[1]);
+        WordLists().spanishWords = _processWords(results[2]);
+        WordLists().germanWords = _processWords(results[3]);
+        WordLists().italianWords = _processWords(results[4]);
+        WordLists().portugueseWords = _processWords(results[5]);
+        WordLists().swedishWords = _processWords(results[6]);
       });
     });
+
+
 
     GameResultDatabase.instance.fetchAllResults().then((results) {
       if (kDebugMode) {
@@ -202,19 +174,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         }
       }
     });
-    /*GameResultDatabase.instance.fetchAllResults().then((results) {
-      print('Results');
-      for(GameResult result in results){
-        print('DB : $result');
-      }
-    });
-    GameResultDatabase.instance.insertGameResult(new GameResult(word: "test", attempts: 6, success: true, date: new DateTime(2024), mode: "classic"));
-    GameResultDatabase.instance.fetchAllResults().then((results) {
-      print('DB');
-      for(GameResult result in results){
-        print('DB : $result');
-      }
-    });*/
   }
 
   @override
