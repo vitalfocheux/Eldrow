@@ -8,7 +8,7 @@ import '../db.dart';
 import '../word_list/word_lists.dart';
 
 class WordleSurvival extends WordleTemplateSolo {
-  const WordleSurvival({super.key, required super.title, required super.language, super.maxAttemps = 9, required super.nbRoundsMax});
+  WordleSurvival({super.key, required super.title, required super.language, super.maxAttemps = 9, required super.nbRoundsMax, super.wordleLength = 5});
 
   @override
   _WordleSurvivalState createState() => _WordleSurvivalState();

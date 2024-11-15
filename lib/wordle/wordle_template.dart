@@ -25,7 +25,7 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
 
   String wordle = '';
   String currentGuess = '';
-  int wordleLength = 5;
+  late int wordleLength;
   int attemps = 0;
   int maxAttemps = 6;
   List<String> guesses = [];

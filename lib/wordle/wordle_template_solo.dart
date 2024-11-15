@@ -7,7 +7,9 @@ import '../word_list/word_lists.dart';
 
 abstract class WordleTemplateSolo extends WordleTemplate {
 
-  const WordleTemplateSolo({super.key, required super.title, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
+  WordleTemplateSolo({super.key, required this.wordleLength, required super.title, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
+
+  final int wordleLength;
 
   @override
   WordleTemplateSoloState createState();
@@ -15,12 +17,15 @@ abstract class WordleTemplateSolo extends WordleTemplate {
 
 abstract class WordleTemplateSoloState<T extends WordleTemplateSolo> extends WordleTemplateState<T> {
 
+  int wordleLength = 5;
+
   @override
   void initState() {
     super.initState();
     dictionary = WordLists().getWords(widget.language);
     maxAttemps = widget.maxAttemps;
     language = widget.language;
+    wordleLength = widget.wordleLength;
     _initializeWordle();
   }
 

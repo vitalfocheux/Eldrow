@@ -40,7 +40,7 @@ class _WordleChooseState extends State<WordleChoose> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const WordleSurvival(title: 'Survival Wordle', language: 'fr', nbRoundsMax: 0,)),
+                      MaterialPageRoute(builder: (context) => WordleSurvival(title: 'Survival Wordle', language: 'fr', nbRoundsMax: 0,)),
                     );
                   },
                   child: const Text('Survival Wordle'),

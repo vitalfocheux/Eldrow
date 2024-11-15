@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../db.dart';
 
 class WordleClassic extends WordleTemplateSolo {
-  const WordleClassic({super.key, required super.title, required super.language, super.maxAttemps, required super.nbRoundsMax});
+  WordleClassic({super.key, required super.wordleLength, required super.title, required super.language, super.maxAttemps, required super.nbRoundsMax,});
 
   @override
   _WordleClassicState createState() => _WordleClassicState();
