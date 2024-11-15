@@ -1,7 +1,6 @@
 import 'package:Wordle/word_list/word_lists.dart';
 import 'package:Wordle/wordle/wordle_dual.dart';
 import 'package:flutter/material.dart';
-import 'package:Wordle/button/start_button.dart';
 
 class StartDual extends StatefulWidget{
   const StartDual({super.key});
@@ -47,7 +46,7 @@ class _StartDualState extends State<StartDual> {
                   if(nbRounds > 0) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DualWordle(nbRoundsMax: nbRounds,)),
+                      MaterialPageRoute(builder: (context) => WordleDual(title: 'Dual Wordle', language: 'fr', nbRoundsMax: nbRounds)),
                     );
                   }else{
                     null;

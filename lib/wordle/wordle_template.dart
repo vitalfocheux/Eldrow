@@ -1,73 +1,59 @@
 import 'dart:math';
-
-import 'package:Wordle/db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class Wordle extends StatefulWidget {
-  const Wordle({super.key, required this.title, required this.wordle, this.maxAttemps = 6, required this.dictionary, required this.language});
+import '../word_list/word_lists.dart';
+
+abstract class WordleTemplate extends StatefulWidget {
+  const WordleTemplate({super.key, required this.title, required this.language, this.maxAttemps = 6, required this.nbRoundsMax});
 
   final String title;
-  final String wordle;
   final int maxAttemps;
-  final List<Set<String>> dictionary;
   final String language;
+  final int nbRoundsMax;
 
   @override
-  State<Wordle> createState() => _WordleState();
+  WordleTemplateState createState();
 }
 
-class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
-
-  final TextEditingController _controller = TextEditingController();
-  int _attemps = 0;
-  String _wordle = '';
-  String currentGuess = '';
-  int _wordleLength = 0;
-  List<String> guesses = [];
-  int _maxAttemps = 6;
+abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> with SingleTickerProviderStateMixin {
+  final TextEditingController controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  List<String> words = [];
-  List<Set<String>> _dictionary = [];
 
   late AnimationController _shakeController;
   late Animation<double> _shakeAnimation;
 
+  String wordle = '';
+  String currentGuess = '';
+  int wordleLength = 5;
+  int attemps = 0;
+  int maxAttemps = 6;
+  List<String> guesses = [];
+  List<Set<String>> dictionary = [];
+  late String language;
+
   @override
   void initState() {
     super.initState();
-    _wordle = widget.wordle;
-    _wordleLength = _wordle.length;
-    _maxAttemps = widget.maxAttemps;
-    _dictionary = widget.dictionary;
-    if (kDebugMode) {
-      print(_wordle);
-    }
+    _initializeShakeAnimation();
+  }
 
-    _shakeController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    _shakeAnimation = Tween<double>(begin: -10, end: 10)
-      .chain(CurveTween(curve: Curves.elasticIn))
-      .animate(_shakeController);
-
+  void _initializeShakeAnimation() {
+    _shakeController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    _shakeAnimation = Tween<double>(begin: -10, end: 10).chain(CurveTween(curve: Curves.elasticIn)).animate(_shakeController);
     _shakeController.addStatusListener((status) {
-      if(status == AnimationStatus.completed){
+      if (status == AnimationStatus.completed) {
         _shakeController.reset();
       }
     });
-
-
   }
 
-  void _shake(String message){
+  void _shake(String message) {
     _shakeController.forward(from: 0);
-    _showTemporaryMessage(message);
+    showTemporaryMessage(message);
   }
 
-  void _showTemporaryMessage(String message) {
+  void showTemporaryMessage(String message) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -97,76 +83,50 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
     });
   }
 
+  void _onSubmit() {
+    if (currentGuess.length == wordleLength) {
+      if (!dictionary[wordleLength].contains(currentGuess.toLowerCase())) {
+        _shake('Not word in list');
+        return;
+      }
+      setState(() {
+        guesses.add(currentGuess);
+        attemps++;
+        checkGame();
+        currentGuess = '';
+        controller.clear();
+      });
+    } else {
+      _shake('Not enough letters');
+    }
+  }
+
+  void checkGame();
+
+  void resetGame();
+
+  void showGameOverDialog(String title, String message);
+
+  Widget getFlag(String language) {
+    try {
+      return Image.asset('assets/flags/$language.png');
+    } catch (e) {
+      return Container();
+    }
+  }
+
   @override
   void dispose() {
     _shakeController.dispose();
     super.dispose();
   }
 
-  void _onSubmit() {
-    if (currentGuess.length == _wordleLength) {
-      if(!_dictionary[_wordleLength].contains(currentGuess.toLowerCase())){
-        _shake('Not word in list');
-        return;
-      }
-      setState(() {
-        guesses.add(currentGuess);
-        _attemps++;
-        if (currentGuess == _wordle) {
-          _showGameOverDialog('Congratulations !', 'You found the word !');
-          GameResultDatabase.instance.insertGameResult(GameResult(word: _wordle, attempts: _attemps, success: true, date: DateTime.now(), mode: 'classic', winStreak: 0, language: widget.language));
-        } else if (_attemps >= _maxAttemps) {
-          _showGameOverDialog('Game Over', 'The word was : $_wordle');
-          GameResultDatabase.instance.insertGameResult(GameResult(word: _wordle, attempts: _attemps, success: false, date: DateTime.now(), mode: 'classic', winStreak: 0, language: widget.language));
-        }
-        currentGuess = '';
-        _controller.clear();
-      });
-    }else{
-      _shake('Not enough letters');
-    }
-  }
-
-  void _showGameOverDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Replay'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _resetGame();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _resetGame() {
-    setState(() {
-      _wordle = _dictionary[_wordleLength].elementAt(Random().nextInt(_dictionary[_wordleLength].length)).toUpperCase();
-      if (kDebugMode) {
-        print(_wordle);
-      }
-      guesses = [];
-      currentGuess = '';
-      _attemps = 0;
-      _controller.clear();
-    });
-  }
+  PreferredSizeWidget appBar();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Wordle en Flutter'),
-      ),
+      appBar: appBar(),
       body: GestureDetector(
         onTap: () => _focusNode.requestFocus(),
         child: AnimatedBuilder(
@@ -185,23 +145,23 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
                     child: GridView.builder(
                       padding: const EdgeInsets.all(8.0),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: _wordleLength,
+                        crossAxisCount: wordleLength,
                         childAspectRatio: 1.0,
                         crossAxisSpacing: 4.0,
                         mainAxisSpacing: 4.0,
                       ),
-                      itemCount: _maxAttemps * _wordleLength,
+                      itemCount: maxAttemps * wordleLength,
                       itemBuilder: (context, index) {
-                        int row = index ~/ _wordleLength;
-                        int col = index % _wordleLength;
+                        int row = index ~/ wordleLength;
+                        int col = index % wordleLength;
                         String letter = '';
                         Color color = Colors.grey[300]!;
 
                         if (row < guesses.length) {
                           letter = guesses[row][col];
-                          if (letter == _wordle[col]) {
+                          if (letter == wordle[col]) {
                             color = Colors.green;
-                          } else if (_wordle.contains(letter)) {
+                          } else if (wordle.contains(letter)) {
                             color = Colors.yellow;
                           } else {
                             color = Colors.grey;
@@ -236,12 +196,12 @@ class _WordleState extends State<Wordle> with SingleTickerProviderStateMixin{
               Opacity(
                 opacity: 0.0,
                 child: TextField(
-                  controller: _controller,
+                  controller: controller,
                   focusNode: _focusNode,
                   autofocus: true,
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.characters,
-                  maxLength: _wordleLength,
+                  maxLength: wordleLength,
                   onChanged: (value) {
                     setState(() {
                       currentGuess = value.toUpperCase();

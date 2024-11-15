@@ -15,4 +15,18 @@ class WordLists {
   List<Set<String>> italianWords = [];
   List<Set<String>> portugueseWords = [];
   List<Set<String>> swedishWords = [];
+
+  Map<String, List<Set<String>>> words = {
+    'fr': [],
+    'en': [],
+    'es': [],
+    'de': [],
+    'it': [],
+    'pt': [],
+    'sw': [],
+  };
+
+  List<Set<String>> getWords(String language) {
+    return words[language]!;
+  }
 }

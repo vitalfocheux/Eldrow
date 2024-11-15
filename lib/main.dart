@@ -66,7 +66,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   late Future<Database> db;
-  List<String> dict = ['assets/dict/french_words.json', 'assets/dict/english_words.json', 'assets/dict/spanish_words.json'];
+  //List<String> dict = ['assets/dict/french_words.json', 'assets/dict/english_words.json', 'assets/dict/spanish_words.json'];
+
+  Map<String, List<Set<String>>> words = {
+    'fr': [],
+    'en': [],
+    'es': [],
+    'de': [],
+    'it': [],
+    'pt': [],
+    'sw': [],
+  };
 
   static Future<List<String>> loadWords(String dictionary) async {
     String jsonString = await rootBundle.loadString(dictionary);
@@ -99,49 +109,60 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     super.initState();
     db = GameResultDatabase.instance.database;
     WidgetsBinding.instance.addObserver(this);
-    /*loadWords("assets/dict/french_words.json").then((words) {
+    loadWords("assets/dict/french_words.json").then((words) {
       setState(() {
-        WordLists().frenchWords = _processWords(words);
+        //WordLists().frenchWords = _processWords(words);
+        this.words['fr'] = _processWords(words);
       });
     });
 
     loadWords("assets/dict/english_words.json").then((words) {
       setState(() {
-        WordLists().englishWords = _processWords(words);
+        //WordLists().englishWords = _processWords(words);
+        this.words['en'] = _processWords(words);
       });
     });
 
     loadWords("assets/dict/spanish_words.json").then((words) {
       setState(() {
-        WordLists().spanishWords = _processWords(words);
+        //WordLists().spanishWords = _processWords(words);
+        this.words['es'] = _processWords(words);
       });
     });
 
     loadWords("assets/dict/german_words.json").then((words) {
       setState(() {
-        WordLists().germanWords = _processWords(words);
+        //WordLists().germanWords = _processWords(words);
+        this.words['de'] = _processWords(words);
       });
     });
 
     loadWords("assets/dict/italian_words.json").then((words) {
       setState(() {
-        WordLists().italianWords = _processWords(words);
+        //WordLists().italianWords = _processWords(words);
+        this.words['it'] = _processWords(words);
       });
     });
 
     loadWords("assets/dict/portuguese_words.json").then((words) {
       setState(() {
-        WordLists().portugueseWords = _processWords(words);
+        //WordLists().portugueseWords = _processWords(words);
+        this.words['pt'] = _processWords(words);
       });
     });
 
     loadWords("assets/dict/swedish_words.json").then((words) {
       setState(() {
-        WordLists().swedishWords = _processWords(words);
+        //WordLists().swedishWords = _processWords(words);
+        this.words['sw'] = _processWords(words);
       });
-    });*/
+    });
 
+    setState(() {
+      WordLists().words = words;
+    });
 
+/*
     Future.wait([
       loadWords("assets/dict/french_words.json"),
       loadWords("assets/dict/english_words.json"),
@@ -160,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         WordLists().portugueseWords = _processWords(results[5]);
         WordLists().swedishWords = _processWords(results[6]);
       });
-    });
+    });*/
 
 
 
