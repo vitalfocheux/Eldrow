@@ -83,9 +83,14 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
     });
   }
 
+  bool wordleDetection(String guess);
+
   void _onSubmit() {
     if (currentGuess.length == wordleLength) {
-      if (!dictionary[wordleLength].contains(currentGuess.toLowerCase())) {
+      if(kDebugMode){
+        print(dictionary);
+      }
+      if (!wordleDetection(currentGuess)) {
         _shake('Not word in list');
         return;
       }

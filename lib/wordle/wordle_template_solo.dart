@@ -35,4 +35,9 @@ abstract class WordleTemplateSoloState<T extends WordleTemplateSolo> extends Wor
     if (kDebugMode) print(wordle);
   }
 
+  @override
+  bool wordleDetection(String guess) {
+    return dictionary[wordleLength].contains(guess.toLowerCase());
+  }
+
 }

@@ -1,3 +1,4 @@
+import 'package:Wordle/word_list/word_lists.dart';
 import 'package:Wordle/wordle/wordle_template.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
   int _nbRounds = 0;
   late int _nbRoundsMax;
   String? _selectedValueAttemps;
+  bool _select = false;
 
   int successP1 = 0;
   int successP2 = 0;
@@ -23,6 +25,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
     super.initState();
     _nbRoundsMax = widget.nbRoundsMax * 2;
     _nbRounds++;
+    wordleLength = 5;
   }
 
   @override
@@ -93,6 +96,9 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
                 onChanged: (String? value) {
                   setState(() {
                     selectedValueAttempts = value;
+
+                    _select = true;
+                    print('${_select}');
                     maxAttemps = int.parse(value!);
                   });
                 },
@@ -101,13 +107,25 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
                 child: const Text('Next'),
                 onPressed: (){
                   String input = controller.text.trim().toUpperCase();
-                  if(maxAttemps < 3 || maxAttemps > 9 || input.isEmpty || !(RegExp(r'^[a-zA-Z]+$').hasMatch(input)) || !dictionary[input.length].contains(input.toLowerCase())){
-                    null;
+                  print("${_select}");
+                  if(!_select || maxAttemps < 3 || maxAttemps > 9){
+                    showTemporaryMessage('The number of attemps must be between 3 and 9');
+                  }else if(input.isEmpty){
+                    showTemporaryMessage('The word must not be empty');
+                  }else if(!(RegExp(r'^[a-zA-Z]+$').hasMatch(input))) {
+                    showTemporaryMessage('The word must contain only letters');
+                  }else if(!WordLists().isAWord(input.toLowerCase())){
+                    showTemporaryMessage('The word must be in the dictionary');
                   }else{
                     Navigator.of(context).pop();
                     wordle = input;
                     wordleLength = wordle.length;
                     controller.clear();
+                    /*for(var language in WordLists().words.entries){
+                      for(var word in language.value){
+                        dictionary.add({word.length: language.value});
+                      }
+                    }*/
                   }
                 },
               ),
@@ -184,6 +202,18 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
         );
       },
     );
+  }
+
+  @override
+  bool wordleDetection(String guess) {
+    for(var language in WordLists().words.entries){
+      for(var word in language.value){
+        if(word.contains(guess.toLowerCase())){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }
