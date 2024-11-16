@@ -114,18 +114,13 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
                     showTemporaryMessage('The word must not be empty');
                   }else if(!(RegExp(r'^[a-zA-Z]+$').hasMatch(input))) {
                     showTemporaryMessage('The word must contain only letters');
-                  }else if(!WordLists().isAWord(input.toLowerCase())){
+                  }else if(!wordleDetection(input.toLowerCase())){
                     showTemporaryMessage('The word must be in the dictionary');
                   }else{
                     Navigator.of(context).pop();
                     wordle = input;
                     wordleLength = wordle.length;
                     controller.clear();
-                    /*for(var language in WordLists().words.entries){
-                      for(var word in language.value){
-                        dictionary.add({word.length: language.value});
-                      }
-                    }*/
                   }
                 },
               ),

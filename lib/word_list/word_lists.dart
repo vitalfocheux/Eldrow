@@ -29,15 +29,4 @@ class WordLists {
   List<Set<String>> getWords(String language) {
     return words[language]!;
   }
-
-  bool isAWord(String word){
-    for(var language in words.entries){
-      for(var wordSet in language.value){
-        if(wordSet.contains(word)){
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }
