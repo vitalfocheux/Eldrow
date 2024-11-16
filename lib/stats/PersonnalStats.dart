@@ -37,7 +37,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
           color: Colors.grey,
           value: 100, // Valeur de la section (40%)
           title: '', // Étiquette de la section
-          radius: 50,
+          radius: 100,
         ),
       ];
     }else{
@@ -47,15 +47,15 @@ class _PersonnalStatsState extends State<PersonnalStats> {
         PieChartSectionData(
           color: Colors.green,
           value: (success / total) * 100, // Valeur de la section (40%)
-          title: '${(success / total) * 100}%', // Étiquette de la section
-          radius: 50,
+          title: '${((success / total) * 100).toStringAsFixed(1)}%', // Étiquette de la section
+          radius: 100,
           titleStyle: const TextStyle(color: Colors.white),
         ),
         PieChartSectionData(
           color: Colors.red,
           value: ((total - success) / total) * 100, // Valeur de la section (30%)
-          title: '${((total - success) / total) * 100}%',
-          radius: 50,
+          title: '${(((total - success) / total) * 100).toStringAsFixed(1)}%',
+          radius: 100,
           titleStyle: const TextStyle(color: Colors.white),
         ),
       ];
@@ -85,8 +85,8 @@ class _PersonnalStatsState extends State<PersonnalStats> {
                     child: PieChart(
                       PieChartData(
                         sections: sections,
-                        centerSpaceRadius: 50,
-                        sectionsSpace: 2,
+                        centerSpaceRadius: 0,
+                        sectionsSpace: 0,
                         borderData: FlBorderData(show: false),
                       ),
                     ),
@@ -161,7 +161,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
           color: Colors.grey,
           value: 100, // Valeur de la section (40%)
           title: '', // Étiquette de la section
-          radius: 50,
+          radius: 100,
         ),
       ];
     }else {
@@ -171,7 +171,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
           color: sectionsLegend.keys.firstWhere((element) => sectionsLegend[element]!.split(',')[0] == entry.key),
           value: (entry.value / languages.values.reduce((a, b) => a + b)) * 100, // Valeur de la section (40%)
           title: '${((entry.value / languages.values.reduce((a, b) => a + b)) * 100).toStringAsFixed(1)}%', // Étiquette de la section
-          radius: 50,
+          radius: 100,
           titleStyle: const TextStyle(color: Colors.white),
         );
       }).toList();
@@ -197,8 +197,8 @@ class _PersonnalStatsState extends State<PersonnalStats> {
           child: PieChart(
             PieChartData(
               sections: sections,
-              centerSpaceRadius: 50,
-              sectionsSpace: 2,
+              centerSpaceRadius: 0,
+              sectionsSpace: 0,
               borderData: FlBorderData(show: false),
             ),
           ),
@@ -230,23 +230,6 @@ class _PersonnalStatsState extends State<PersonnalStats> {
         ],
       );
     }).toList(),
-    /*return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: sections.entries.map((entry) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 16,
-              height: 16,
-              color: entry.key,
-            ),
-            const SizedBox(width: 8,),
-            Text(entry.value),
-            const SizedBox(width: 16,)
-          ],
-        );
-      }).toList(),*/
     );
   }
 
