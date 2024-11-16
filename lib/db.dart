@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as path;
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 class GameResult {
   final int? id;
@@ -72,14 +73,18 @@ class GameResultDatabase {
   }
 
   Future<Database> _initDB() async {
-    if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+    if(kIsWeb){
+      databaseFactory = databaseFactoryFfiWeb;
+    }else if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
     }
 
     String dbPath;
 
-    if(Platform.isAndroid || Platform.isIOS){
+    if(kIsWeb){
+      dbPath = 'game_results.db';
+    }else if(Platform.isAndroid || Platform.isIOS){
       var databasesPath = await getDatabasesPath();
       dbPath = path.join(databasesPath, 'game_results.db');
     }else{
