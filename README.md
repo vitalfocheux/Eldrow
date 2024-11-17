@@ -6,7 +6,7 @@ Eldrow est un équivalent du jeu [Wordle](https://www.nytimes.com/games/wordle/i
 
 Avant tous :
 
-````shell
+```shell
 flutter pub get
 ```
 
