@@ -1,4 +1,6 @@
-import 'package:Wordle/word_list/word_lists.dart';
+import 'package:Wordle/Components/DropDownButtonWordle/drop_down_button_wordle.dart';
+import 'package:Wordle/Components/menu_choose_wordle.dart';
+import 'package:Wordle/wordle/wordle_utils.dart';
 import 'package:Wordle/wordle/wordle_dual.dart';
 import 'package:flutter/material.dart';
 
@@ -18,43 +20,47 @@ class _StartDualState extends State<StartDual> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dual Wordle'),
+        title: const Text(
+            'Dual ELDROW',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+          ),
+        ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Choose the number of rounds'),
-            DropdownButton<String>(
-              value: _selectedValueRounds,
-              hint: const Text('Select a value'),
-              items: <String>['3', '4', '5', '6', '7', '8', '9'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedValueRounds = value;
-                  nbRounds = int.parse(value!);
-                });
-              },
-            ),
-            ElevatedButton(
+        child: MenuChooseWordle(
+            children: [
+              DropDownButtonWordle(
+                  title: 'Choose the number of rounds',
+                  hint: 'Select a value',
+                  items: <String>['3', '4', '5', '6', '7', '8', '9'].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  selectedValue: _selectedValueRounds,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedValueRounds = value;
+                      nbRounds = int.parse(value!);
+                    });
+                  }),
+              ElevatedButton(
                 onPressed: () {
                   if(nbRounds > 0) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => WordleDual(title: 'Dual Wordle', language: 'fr', nbRoundsMax: nbRounds)),
+                      MaterialPageRoute(builder: (context) => WordleDual(language: 'fr', nbRoundsMax: nbRounds)),
                     );
                   }else{
                     null;
                   }
                 },
                 child: const Text('Start Dual Wordle'),
-            ),
-          ],
+              ),
+            ],
         ),
       ),
     );

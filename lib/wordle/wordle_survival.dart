@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../db.dart';
-import '../word_list/word_lists.dart';
+import 'wordle_utils.dart';
 
 class WordleSurvival extends WordleTemplateSolo {
-  WordleSurvival({super.key, required super.title, required super.language, super.maxAttemps = 9, required super.nbRoundsMax, super.wordleLength = 5});
+  WordleSurvival({super.key, required super.language, super.maxAttemps = 9, required super.nbRoundsMax, super.wordleLength = 5});
 
   @override
   _WordleSurvivalState createState() => _WordleSurvivalState();
@@ -97,7 +97,7 @@ class _WordleSurvivalState extends WordleTemplateSoloState<WordleSurvival> {
           language = 'sw';
           break;
       }
-      dictionary = WordLists().getWords(language);
+      dictionary = WordleUtils().getWords(language);
     });
   }
 
@@ -134,9 +134,16 @@ class _WordleSurvivalState extends WordleTemplateSoloState<WordleSurvival> {
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('Wordle en Flutter'),
+      title: const Text(
+          'Survival ELDROW',
+          style: TextStyle(
+            //fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+      ),
       actions: [
         Text('Win Streak : $winStreak'),
+        const SizedBox(width: 10,),
         getFlag(language),
       ],
     );

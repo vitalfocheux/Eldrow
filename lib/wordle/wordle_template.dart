@@ -1,13 +1,10 @@
-import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../word_list/word_lists.dart';
 
 abstract class WordleTemplate extends StatefulWidget {
-  const WordleTemplate({super.key, required this.title, required this.language, this.maxAttemps = 6, required this.nbRoundsMax});
+  const WordleTemplate({super.key, required this.language, this.maxAttemps = 6, required this.nbRoundsMax});
 
-  final String title;
   final int maxAttemps;
   final String language;
   final int nbRoundsMax;
@@ -114,7 +111,10 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
 
   Widget getFlag(String language) {
     try {
-      return Image.asset('assets/flags/$language.png');
+      return Image.asset(
+          'assets/flags/$language.png',
+          width: 50.0,
+      );
     } catch (e) {
       return Container();
     }

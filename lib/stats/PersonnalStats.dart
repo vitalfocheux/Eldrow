@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 class PersonnalStats extends StatefulWidget {
 
-  const PersonnalStats({Key? super.key});
+  const PersonnalStats({super.key});
 
   @override
   State<StatefulWidget> createState() => _PersonnalStatsState();
@@ -237,7 +237,13 @@ class _PersonnalStatsState extends State<PersonnalStats> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Graphique en camembert"),
+        title: const Text(
+            'Personal stats',
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -247,11 +253,11 @@ class _PersonnalStatsState extends State<PersonnalStats> {
                   future: _PieChartMode("classic"),
                   builder: (context, snapshot) {
                     if(snapshot.connectionState == ConnectionState.waiting){
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }else if(snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     }else if(!snapshot.hasData){
-                      return Text('No data found');
+                      return const Text('No data found');
                     }else{
                       return snapshot.data!;
                     }
@@ -261,11 +267,11 @@ class _PersonnalStatsState extends State<PersonnalStats> {
                   future: _PieChartMode("survival"),
                   builder: (context, snapshot) {
                     if(snapshot.connectionState == ConnectionState.waiting){
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }else if(snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     }else if(!snapshot.hasData){
-                      return Text('No data found');
+                      return const Text('No data found');
                     }else{
                       return snapshot.data!;
                     }
@@ -275,11 +281,11 @@ class _PersonnalStatsState extends State<PersonnalStats> {
                 future: _PieChartLanguage(),
                 builder: (context, snapshot) {
                   if(snapshot.connectionState == ConnectionState.waiting){
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }else if(snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   }else if(!snapshot.hasData){
-                    return Text('No data found');
+                    return const Text('No data found');
                   }else{
                     return snapshot.data!;
                   }

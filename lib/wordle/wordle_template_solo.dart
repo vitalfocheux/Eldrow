@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:Wordle/wordle/wordle_template.dart';
 import 'package:flutter/foundation.dart';
 
-import '../word_list/word_lists.dart';
+import 'wordle_utils.dart';
 
 abstract class WordleTemplateSolo extends WordleTemplate {
 
-  WordleTemplateSolo({super.key, required this.wordleLength, required super.title, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
+  WordleTemplateSolo({super.key, required this.wordleLength, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
 
   final int wordleLength;
 
@@ -22,7 +22,7 @@ abstract class WordleTemplateSoloState<T extends WordleTemplateSolo> extends Wor
   @override
   void initState() {
     super.initState();
-    dictionary = WordLists().getWords(widget.language);
+    dictionary = WordleUtils().getWords(widget.language);
     maxAttemps = widget.maxAttemps;
     language = widget.language;
     wordleLength = widget.wordleLength;

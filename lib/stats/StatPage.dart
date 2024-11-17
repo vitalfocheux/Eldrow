@@ -1,3 +1,4 @@
+import 'package:Wordle/Components/button/button_wordle.dart';
 import 'package:Wordle/stats/LastGameHistory.dart';
 import 'package:Wordle/stats/PersonnalStats.dart';
 import 'package:flutter/material.dart';
@@ -19,32 +20,32 @@ class _StatPageState extends State<StatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LastGameHistory())
-                    );
-                  },
-                  child: const Text('History of last game'),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context, 
-                        MaterialPageRoute(builder: (context) => const PersonnalStats()));
-                  },
-                  child: const Text('Personnal Stats'),
-              ),
-            ],
+        title: const Text(
+          'Stats ELDROW',
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
           ),
+        ),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 50),
+
+            const SizedBox(height: 20,),
+            ButtonWordle(buttonPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LastGameHistory())
+            ), icon: Icons.history, title: 'Last Game History'),
+            const SizedBox(height: 50,),
+            ButtonWordle(buttonPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PersonnalStats())
+            ), icon: Icons.pie_chart, title: 'Personal Stats'),
+          ],
         ),
       ),
     );

@@ -1,10 +1,10 @@
-import 'package:Wordle/word_list/word_lists.dart';
+import 'package:Wordle/wordle/wordle_utils.dart';
 import 'package:Wordle/wordle/wordle_template.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WordleDual extends WordleTemplate {
-  const WordleDual({super.key, required super.title, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
+  const WordleDual({super.key, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
 
   @override
   _WordleDualState createState() => _WordleDualState();
@@ -133,7 +133,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('Dual Wordle'),
+      title: const Text('Dual ELDROW'),
       actions: [
         Text('Round $_nbRounds'),
       ],
@@ -201,7 +201,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
 
   @override
   bool wordleDetection(String guess) {
-    for(var language in WordLists().words.entries){
+    for(var language in WordleUtils().words.entries){
       for(var word in language.value){
         if(word.contains(guess.toLowerCase())){
           return true;

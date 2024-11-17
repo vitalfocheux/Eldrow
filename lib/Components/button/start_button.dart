@@ -15,7 +15,7 @@ class StartButton extends StatelessWidget {
       onPressed: (maxAttemps > 0 && wordleLength > 0) ? () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WordleClassic(title: 'Wordle Classic', wordleLength: wordleLength, maxAttemps: maxAttemps, language: language, nbRoundsMax: 0,)),
+          MaterialPageRoute(builder: (context) => WordleClassic(wordleLength: wordleLength, maxAttemps: maxAttemps, language: language, nbRoundsMax: 0,)),
         );
       } : null,
       child: Text(text),
