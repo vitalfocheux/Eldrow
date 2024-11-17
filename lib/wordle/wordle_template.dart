@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 abstract class WordleTemplate extends StatefulWidget {
@@ -207,6 +208,9 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.characters,
                   maxLength: wordleLength,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z]')),
+                  ],
                   onChanged: (value) {
                     setState(() {
                       currentGuess = value.toUpperCase();
