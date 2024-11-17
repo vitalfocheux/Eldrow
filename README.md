@@ -41,3 +41,7 @@ Une partie en mode duel, où deux personnes s’affrontent tour à tour sur le m
 Lors du chargement de l'application tous les mots se chargent pour les stocker dans une variable, j'ai fait le choix de ne garder que les mots ne possédant que des lettres comprises entre a et z, donc les mots avec accents disparaissent. De même lorsque l'utilisateur soumet un mot aucun accent n'est accepté.
 
 Pour le mode duel l'utilisateur peut indiquer un mot mais il faut qu'il soit valide c'est-à-dire qu'il fasse parti d'un des 7 dictionnaires de mots utiliser par l'application (français, anglais, espagnol, allemand, italien, portugais, suédois)
+
+## Chose à améliorer
+
+La possibilité de voir la partie de entier dans l'historique plutôt que simplement le mot et le résultat
