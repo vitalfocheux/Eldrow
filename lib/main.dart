@@ -4,7 +4,6 @@ import 'package:Wordle/Components/button/button_wordle.dart';
 import 'package:Wordle/stats/StatPage.dart';
 import 'package:Wordle/wordle/wordle_utils.dart';
 import 'package:Wordle/wordle/wordle_choose.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
@@ -44,6 +43,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   late Future<Database> db;
 
+
   Map<String, List<Set<String>>> words = {
     'fr': [],
     'en': [],
@@ -54,12 +54,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     'sw': [],
   };
 
+  // Méthode pour charger les mots depuis un fichier json
   static Future<List<String>> loadWords(String dictionary) async {
     String jsonString = await rootBundle.loadString(dictionary);
     List<dynamic> jsonResponse = json.decode(jsonString);
     return jsonResponse.cast<String>();
   }
 
+  /// Méthode pour vérifier si un mot est valide
   bool wordleRules(String wordle){
     if(!(RegExp(r'^[a-zA-Z]+$').hasMatch(wordle))){
       return false;
@@ -67,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     return true;
   }
 
+  /// Méthode pour traiter les mots et les organiser par longueur
   List<Set<String>> _processWords(List<String> words){
     List<Set<String>> processedWords = [];
     for(String word in words){
@@ -129,17 +132,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
     setState(() {
       WordleUtils().words = words;
-    });
-
-    GameResultDatabase.instance.fetchAllResults().then((results) {
-      if (kDebugMode) {
-        print("DB SIZE ${results.length}");
-      }
-      for(GameResult result in results){
-        if (kDebugMode) {
-          print('DB : $result');
-        }
-      }
     });
   }
 

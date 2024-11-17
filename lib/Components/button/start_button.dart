@@ -1,6 +1,9 @@
 import 'package:Wordle/wordle/wordle_classic.dart';
 import 'package:flutter/material.dart';
 
+/// StartButton est une classe qui permet de créer un bouton pour démarrer une partie de
+/// Eldrow Classic. Ce bouton est désactivé si le nombre d'essais maximum est inférieur ou égal à 0
+
 class StartButton extends StatelessWidget {
   final String text;
   final int wordleLength;

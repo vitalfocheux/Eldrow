@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// DropDownButtonWordle est une classe qui permet de créer un widget où l'on va avoir un titre
+/// pour le dropdown et un dropdown avec une liste d'éléments.
 class DropDownButtonWordle extends StatelessWidget {
 
   const DropDownButtonWordle({super.key, required this.title, required this.hint, required this.items, required this.selectedValue, required this.onChanged});

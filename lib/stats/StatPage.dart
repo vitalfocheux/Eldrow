@@ -3,11 +3,13 @@ import 'package:Wordle/stats/LastGameHistory.dart';
 import 'package:Wordle/stats/PersonnalStats.dart';
 import 'package:flutter/material.dart';
 
+/// StatPage est une classe qui va permettre de gérer la page de statistiques
+
 class StatPage extends StatefulWidget {
 
   final String title;
 
-  const StatPage({Key? key, required this.title}) : super(key: key);
+  const StatPage({super.key, required this.title});
 
   @override
   State<StatefulWidget> createState() => _StatPageState();

@@ -3,6 +3,8 @@ import 'package:Wordle/wordle/wordle_template.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+/// WordleDual est une classe qui permet de jouer à un jeu de Wordle en duel.
+
 class WordleDual extends WordleTemplate {
   const WordleDual({super.key, required super.language, super.maxAttemps = 6, required super.nbRoundsMax});
 
@@ -28,6 +30,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
     wordleLength = 5;
   }
 
+  /// Méthode appelée lorsque les dépendances changent et permet de choisir un mot.
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -36,6 +39,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
     });
   }
 
+  /// Méthode pour terminer le jeu et afficher le résultat
   void end() {
     showDialog(
       context: context,
@@ -71,6 +75,7 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
     );
   }
 
+  /// Méthode pour choisir un mot et le nombre de tentatives
   void chooseWord(){
     showDialog(
         context: context,
@@ -98,7 +103,6 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
                     selectedValueAttempts = value;
 
                     _select = true;
-                    print('${_select}');
                     maxAttemps = int.parse(value!);
                   });
                 },
@@ -107,7 +111,6 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
                 child: const Text('Next'),
                 onPressed: (){
                   String input = controller.text.trim().toUpperCase();
-                  print("${_select}");
                   if(!_select || maxAttemps < 3 || maxAttemps > 9){
                     showTemporaryMessage('The number of attemps must be between 3 and 9');
                   }else if(input.isEmpty){
@@ -139,8 +142,6 @@ class _WordleDualState extends WordleTemplateState<WordleTemplate> {
       ],
     );
   }
-
-
 
   @override
   void checkGame() {

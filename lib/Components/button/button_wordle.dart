@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// ButtonWordle est une classe qui permet de créer un bouton avec une icône et un texte, ainsi
+/// qu'une action à effectuer lorsqu'on appuie sur le bouton.
+
 class ButtonWordle extends StatelessWidget {
 
   const ButtonWordle({super.key, required this.buttonPressed, required this.icon, required this.title, this.height = 200.0, this.width = 200.0, this.borderRadius = 10.0});

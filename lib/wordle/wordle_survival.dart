@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import '../db.dart';
 import 'wordle_utils.dart';
 
+/// WordleSurvival est une classe qui permet de jouer au jeu Wordle en mode survie.
+
 class WordleSurvival extends WordleTemplateSolo {
   WordleSurvival({super.key, required super.language, super.maxAttemps = 9, required super.nbRoundsMax, super.wordleLength = 5});
 
@@ -47,6 +49,7 @@ class _WordleSurvivalState extends WordleTemplateSoloState<WordleSurvival> {
     });
   }
 
+  /// Méthode pour avancer dans le jeu
   void advance(){
     setState(() {
       if(wordleLength < 9 && (!randomAll || !randomSameLanguage)){
@@ -72,6 +75,7 @@ class _WordleSurvivalState extends WordleTemplateSoloState<WordleSurvival> {
     });
   }
 
+  /// Méthode pour changer de langue aléatoirement
   void randomLanguage(){
     setState(() {
       switch(Random().nextInt(7)){

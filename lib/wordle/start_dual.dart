@@ -1,8 +1,10 @@
 import 'package:Wordle/Components/DropDownButtonWordle/drop_down_button_wordle.dart';
 import 'package:Wordle/Components/menu_choose_wordle.dart';
-import 'package:Wordle/wordle/wordle_utils.dart';
 import 'package:Wordle/wordle/wordle_dual.dart';
 import 'package:flutter/material.dart';
+
+/// StartDual est une classe qui permet de choisir le nombre de rounds pour le mode de jeu Dual Wordle
+/// et de lancer le jeu
 
 class StartDual extends StatefulWidget{
   const StartDual({super.key});

@@ -4,6 +4,8 @@ import 'package:Wordle/wordle/start_dual.dart';
 import 'package:Wordle/wordle/wordle_survival.dart';
 import 'package:flutter/material.dart';
 
+/// WordleChoose est une classe qui permet de choisir entre les différents modes de jeu
+
 class WordleChoose extends StatefulWidget {
 
   final String title;

@@ -3,6 +3,9 @@ import 'package:Wordle/Components/menu_choose_wordle.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordle/Components/button/start_button.dart';
 
+/// StartClassic est une classe qui permet de choisir la longueur du mot, le nombre d'essais
+/// et la langue pour le mode classique
+
 class StartClassic extends StatefulWidget{
   const StartClassic({super.key});
 
@@ -28,6 +31,7 @@ class _StartClassicState extends State<StartClassic> {
     'sw': 'Swedish',
   };
 
+  /// Méthode pour créer des éléments de menu déroulants à partir d'une liste de valeurs
   List<DropdownMenuItem<String>> _itemsValues(List<String> items){
     return items.map((String value) {
       return DropdownMenuItem<String>(
@@ -37,6 +41,7 @@ class _StartClassicState extends State<StartClassic> {
     }).toList();
   }
 
+  /// Méthode pour créer des éléments de menu déroulants à partir d'une map de langues
   List<DropdownMenuItem<String>> _itemsLanguages(Map<String, String> items){
     return items.keys.map((String key) {
       return DropdownMenuItem(

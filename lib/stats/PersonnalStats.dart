@@ -2,6 +2,9 @@ import 'package:Wordle/db.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+/// PersonnalStats est une classe qui permet d'afficher les statistiques personnelles de
+/// l'utilisateur.
+
 class PersonnalStats extends StatefulWidget {
 
   const PersonnalStats({super.key});
@@ -12,13 +15,16 @@ class PersonnalStats extends StatefulWidget {
 }
 
 class _PersonnalStatsState extends State<PersonnalStats> {
-  
+
+  /// Méthode pour créer un graphique en camembert pour un mode donné.
   Future<Widget> _PieChartMode(String mode) async {
     Map<Color, String> sectionsLegend = {};
 
     int bestStreak = 0;
     int total = 0;
     int success = 0;
+
+    /// Récupération des résultats de la base de données pour un mode donné.
     final results = await GameResultDatabase.instance.fetchResultsByMode(mode);
     total = results.length;
     for(var result in results){
@@ -35,8 +41,8 @@ class _PersonnalStatsState extends State<PersonnalStats> {
       sections = [
         PieChartSectionData(
           color: Colors.grey,
-          value: 100, // Valeur de la section (40%)
-          title: '', // Étiquette de la section
+          value: 100,
+          title: '',
           radius: 100,
         ),
       ];
@@ -46,14 +52,14 @@ class _PersonnalStatsState extends State<PersonnalStats> {
       sections = [
         PieChartSectionData(
           color: Colors.green,
-          value: (success / total) * 100, // Valeur de la section (40%)
-          title: '${((success / total) * 100).toStringAsFixed(1)}%', // Étiquette de la section
+          value: (success / total) * 100,
+          title: '${((success / total) * 100).toStringAsFixed(1)}%',
           radius: 100,
           titleStyle: const TextStyle(color: Colors.white),
         ),
         PieChartSectionData(
           color: Colors.red,
-          value: ((total - success) / total) * 100, // Valeur de la section (30%)
+          value: ((total - success) / total) * 100,
           title: '${(((total - success) / total) * 100).toStringAsFixed(1)}%',
           radius: 100,
           titleStyle: const TextStyle(color: Colors.white),
@@ -132,6 +138,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
     );
   }
 
+  /// Méthode pour créer un graphique en camembert pour les langues.
   Future<Widget> _PieChartLanguage() async {
     final results = await GameResultDatabase.instance.fetchAllResults();
     Map<String, int> languages = {};
@@ -159,18 +166,17 @@ class _PersonnalStatsState extends State<PersonnalStats> {
       sections = [
         PieChartSectionData(
           color: Colors.grey,
-          value: 100, // Valeur de la section (40%)
-          title: '', // Étiquette de la section
+          value: 100,
+          title: '',
           radius: 100,
         ),
       ];
     }else {
       sections = languages.entries.map((entry) {
         return PieChartSectionData(
-          //color: sectionsLegend.keys.elementAt(languages.keys.toList().indexOf(entry.key)),
           color: sectionsLegend.keys.firstWhere((element) => sectionsLegend[element]!.split(',')[0] == entry.key),
-          value: (entry.value / languages.values.reduce((a, b) => a + b)) * 100, // Valeur de la section (40%)
-          title: '${((entry.value / languages.values.reduce((a, b) => a + b)) * 100).toStringAsFixed(1)}%', // Étiquette de la section
+          value: (entry.value / languages.values.reduce((a, b) => a + b)) * 100,
+          title: '${((entry.value / languages.values.reduce((a, b) => a + b)) * 100).toStringAsFixed(1)}%',
           radius: 100,
           titleStyle: const TextStyle(color: Colors.white),
         );
@@ -210,6 +216,7 @@ class _PersonnalStatsState extends State<PersonnalStats> {
     );
   }
 
+  /// Méthode pour construire la légende du graphique en camembert.
   Widget _buildLegend(Map<Color, String> sections){
     return Wrap(
       alignment: WrapAlignment.center,

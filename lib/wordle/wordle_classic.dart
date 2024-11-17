@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import '../db.dart';
 
+/// WordleClassic est la classe qui permet de jouer au mode classique du jeu Wordle
+
 class WordleClassic extends WordleTemplateSolo {
   WordleClassic({super.key, required super.wordleLength, required super.language, super.maxAttemps, required super.nbRoundsMax,});
 
@@ -18,6 +20,7 @@ class _WordleClassicState extends WordleTemplateSoloState<WordleClassic> {
   @override
   void resetGame() {
     setState(() {
+      /// Sélection aléatoire d'un mot dans le dictionnaire
       wordle = dictionary[wordleLength].elementAt(Random().nextInt(dictionary[wordleLength].length)).toUpperCase();
       if (kDebugMode) {
         print(wordle);

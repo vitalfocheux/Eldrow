@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// WordleTemplate est un widget abstrait qui définit le template de base pour le jeu Wordle
 
 abstract class WordleTemplate extends StatefulWidget {
   const WordleTemplate({super.key, required this.language, this.maxAttemps = 6, required this.nbRoundsMax});
@@ -13,6 +14,8 @@ abstract class WordleTemplate extends StatefulWidget {
   @override
   WordleTemplateState createState();
 }
+
+/// WordleTemplateState est un état abstrait qui définit le template de base pour le jeu Wordle
 
 abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> with SingleTickerProviderStateMixin {
   final TextEditingController controller = TextEditingController();
@@ -30,12 +33,14 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
   List<Set<String>> dictionary = [];
   late String language;
 
+  /// Méthode pour initialiser le jeu Wordle
   @override
   void initState() {
     super.initState();
     _initializeShakeAnimation();
   }
 
+  /// Méthode pour initialiser l'animation de secousse
   void _initializeShakeAnimation() {
     _shakeController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     _shakeAnimation = Tween<double>(begin: -10, end: 10).chain(CurveTween(curve: Curves.elasticIn)).animate(_shakeController);
@@ -46,11 +51,13 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
     });
   }
 
+  /// Méthode pour déclencher l'animation de secousse et afficher un message temporaire
   void _shake(String message) {
     _shakeController.forward(from: 0);
     showTemporaryMessage(message);
   }
 
+  /// Méthode pour afficher un message temporaire
   void showTemporaryMessage(String message) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
@@ -81,8 +88,10 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
     });
   }
 
+  /// Méthode pour détecter si un mot est dans un dictionnaire ou non
   bool wordleDetection(String guess);
 
+  /// Méthode pour soumettre une tentative
   void _onSubmit() {
     if (currentGuess.length == wordleLength) {
       if(kDebugMode){
@@ -104,12 +113,16 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
     }
   }
 
+  /// Méthode pour vérifier l'état du jeu
   void checkGame();
 
+  /// Méthode pour réinitialiser le jeu
   void resetGame();
 
+  ///  Méthode pour afficher une boîte de dialogue de fin de jeu
   void showGameOverDialog(String title, String message);
 
+  /// Méthode pour obtenir le drapeau correspondant à une langue
   Widget getFlag(String language) {
     try {
       return Image.asset(
@@ -121,14 +134,17 @@ abstract class WordleTemplateState<T extends WordleTemplate> extends State<T> wi
     }
   }
 
+  /// Méthode pour libérer les ressources
   @override
   void dispose() {
     _shakeController.dispose();
     super.dispose();
   }
 
+  /// Méthode pour créer l'appBar
   PreferredSizeWidget appBar();
 
+  /// Méthode pour construire l'interface utilisateur
   @override
   Widget build(BuildContext context) {
     return Scaffold(
