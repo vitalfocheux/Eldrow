@@ -16,6 +16,12 @@ Faites la commande suivante et choisissez votre devices (à noter que la base de
 flutter run
 ```
 
+Si vous voulez démarrez sous le web executer la commande suivante pour ne pas avoir d'erreur sur les statistiques
+
+```shell
+flutter run sqflite_common_ffi_web:setup
+```
+
 ## Mode de jeu
 
 ### Classique
